@@ -72,8 +72,10 @@ public class DeviceMonitorController {
             }
         });
 
+        //Shows the properties in a window
         MenuItem infoItem = new MenuItem("Properties");
         infoItem.setOnAction(event -> {
+            closeEditProperties();
             Device selectedDevice = deviceListView.getSelectionModel().getSelectedItem();
             if(selectedDevice instanceof SoftwareDevice){
                 show_software_device_info((SoftwareDevice)selectedDevice);
@@ -83,8 +85,10 @@ public class DeviceMonitorController {
             }
         });
 
+        //Show thw edit feature
         MenuItem editItem = new MenuItem("Edit Properties");
         editItem.setOnAction(event -> {
+            HideInformation();
             Device selectedDevice = deviceListView.getSelectionModel().getSelectedItem();
             if(selectedDevice instanceof SoftwareDevice){
                 edit_software_device_properties((SoftwareDevice)selectedDevice);
@@ -197,18 +201,23 @@ public class DeviceMonitorController {
             switch (hardwareChoiceBox.getValue()){
                 case "Manufacturer":
                     selectedDevice.setManufacturer(propertyTextField.getText());
+                    propertyTextField.clear();
                     break;
                 case "Device Type":
                     selectedDevice.setDeviceType(propertyTextField.getText());
+                    propertyTextField.clear();
                     break;
                 case "Location":
                     selectedDevice.setLocation(propertyTextField.getText());
+                    propertyTextField.clear();
                     break;
                 case "Version":
                     selectedDevice.setVersion(propertyTextField.getText());
+                    propertyTextField.clear();
                     break;
                 case "MAC Address":
                     selectedDevice.setMAC_Address(propertyTextField.getText());
+                    propertyTextField.clear();
                     break;
             }
         });
@@ -229,12 +238,15 @@ public class DeviceMonitorController {
                     break;
                 case "Device Type":
                     selectedDevice.setDeviceType(propertyTextField.getText());
+                    propertyTextField.clear();
                     break;
                 case "Version":
                     selectedDevice.setVersion(propertyTextField.getText());
+                    propertyTextField.clear();
                     break;
                 case "Installation date and time":
                     selectedDevice.setInstallation_data_and_time(propertyTextField.getText());
+                    propertyTextField.clear();
                     break;
             }
         });
