@@ -2,11 +2,11 @@ package com.ssi.devicemonitor.entity;
 
 public class HardwareDevice  extends Device{
 
-     public String manufacturer = null;
-     public String deviceType = null;
-     public String location = null;
-     public String version = null;
-     public String MAC_Address = null;
+    private String manufacturer = null;
+    private String deviceType = null;
+    private String location = null;
+    private String version = null;
+    private String MAC_Address = null;
 
     public HardwareDevice(String name) {
         super(name);

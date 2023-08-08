@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
 public class DeviceMonitor {
     private List<Device> devices;
     private Timer statusUpdateTimer;

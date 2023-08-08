@@ -3,6 +3,8 @@ package com.ssi.devicemonitor.controller;
 import com.ssi.devicemonitor.entity.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -29,8 +31,21 @@ public class DeviceMonitorController {
     private TextArea deviceInformation;
 
     @FXML
+    private ChoiceBox<String> hardwareChoiceBox;
+    @FXML
+    private ChoiceBox<String> softwareChoiceBox;
+    @FXML
+    private TextField propertyTextField;
+
+    @FXML
+    private Button closeEdit;
+    private String[] hardwareProperties = {"Manufacturer","Device Type","Location","Version","MAC Address"};
+    private String[] softwareProperties = {"Manufacturer","Device Type","Version","Installation date and time"};
+
+    @FXML
     private Button hideInformationButton;
     private DeviceMonitor deviceMonitor;
+
 
 
     public void initialize() {
@@ -45,15 +60,19 @@ public class DeviceMonitorController {
 
         // Add context menu to ListView
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem removeItem = new MenuItem("Remove");
 
+        hardwareChoiceBox.getItems().addAll(hardwareProperties);
+        softwareChoiceBox.getItems().addAll(softwareProperties);
+
+        MenuItem removeItem = new MenuItem("Remove");
         removeItem.setOnAction(event -> {
             Device selectedDevice = deviceListView.getSelectionModel().getSelectedItem();
             if (selectedDevice != null) {
                 deviceMonitor.removeDevice(selectedDevice);
             }
         });
-        MenuItem infoItem = new MenuItem("Information");
+
+        MenuItem infoItem = new MenuItem("Properties");
         infoItem.setOnAction(event -> {
             Device selectedDevice = deviceListView.getSelectionModel().getSelectedItem();
             if(selectedDevice instanceof SoftwareDevice){
@@ -64,11 +83,26 @@ public class DeviceMonitorController {
             }
         });
 
+        MenuItem editItem = new MenuItem("Edit Properties");
+        editItem.setOnAction(event -> {
+            Device selectedDevice = deviceListView.getSelectionModel().getSelectedItem();
+            if(selectedDevice instanceof SoftwareDevice){
+                edit_software_device_properties((SoftwareDevice)selectedDevice);
+            }
+            else if(selectedDevice instanceof HardwareDevice){
+                hardwareChoiceBox.setVisible(true);
+                edit_hardware_device_properties((HardwareDevice) selectedDevice);
+            }
+        });
+
         contextMenu.getItems().addAll(removeItem);
         contextMenu.getItems().addAll(infoItem);
+        contextMenu.getItems().addAll(editItem);
         deviceListView.setContextMenu(contextMenu);
 
     }
+
+
 
     private class DataUpdateTask extends TimerTask {
 
@@ -131,20 +165,21 @@ public class DeviceMonitorController {
     private void show_hardware_device_info(HardwareDevice selectedDevice) {
         deviceInformation.setVisible(true);
         hideInformationButton.setVisible(true);
-        if(selectedDevice.getManufacturer()!=null) deviceInformation.appendText(selectedDevice.getManufacturer()+"\n");
-        if(selectedDevice.getDeviceType()!=null) deviceInformation.appendText(selectedDevice.getDeviceType()+"\n");
-        if(selectedDevice.getLocation()!=null) deviceInformation.appendText(selectedDevice.getLocation()+"\n");
-        if(selectedDevice.getVersion()!=null) deviceInformation.appendText(selectedDevice.getVersion()+"\n");
-        if(selectedDevice.getMAC_Address()!=null) deviceInformation.appendText(selectedDevice.getMAC_Address()+"\n");
+        if(selectedDevice.getManufacturer()!=null) deviceInformation.appendText("Manufacturer- "+selectedDevice.getManufacturer()+"\n");
+        if(selectedDevice.getDeviceType()!=null) deviceInformation.appendText("Device Type- "+selectedDevice.getDeviceType()+"\n");
+        if(selectedDevice.getLocation()!=null) deviceInformation.appendText("Location- "+selectedDevice.getLocation()+"\n");
+        if(selectedDevice.getVersion()!=null) deviceInformation.appendText("Version- "+selectedDevice.getVersion()+"\n");
+        if(selectedDevice.getMAC_Address()!=null) deviceInformation.appendText("MAC Address- "+selectedDevice.getMAC_Address()+"\n");
+
     }
 
     private void show_software_device_info(SoftwareDevice selectedDevice) {
         deviceInformation.setVisible(true);
         hideInformationButton.setVisible(true);
-        if(selectedDevice.getManufacturer()!=null) deviceInformation.appendText(selectedDevice.getManufacturer()+"\n");
-        if(selectedDevice.getDeviceType()!=null) deviceInformation.appendText(selectedDevice.getDeviceType()+"\n");
-        if(selectedDevice.getVersion()!=null) deviceInformation.appendText(selectedDevice.getVersion()+"\n");
-        if(selectedDevice.getInstallation_data_and_time()!=null) deviceInformation.appendText(selectedDevice.getInstallation_data_and_time()+"\n");
+        if(selectedDevice.getManufacturer()!=null) deviceInformation.appendText("Manufacturer- "+selectedDevice.getManufacturer()+"\n");
+        if(selectedDevice.getDeviceType()!=null) deviceInformation.appendText("Device Type- "+selectedDevice.getDeviceType()+"\n");
+        if(selectedDevice.getVersion()!=null) deviceInformation.appendText("Version- "+selectedDevice.getVersion()+"\n");
+        if(selectedDevice.getInstallation_data_and_time()!=null) deviceInformation.appendText("Installation date and time- "+selectedDevice.getInstallation_data_and_time()+"\n");
 
     }
     public void HideInformation(){
@@ -152,4 +187,66 @@ public class DeviceMonitorController {
         deviceInformation.setVisible(false);
         hideInformationButton.setVisible(false);
     }
+
+    private void edit_hardware_device_properties(HardwareDevice selectedDevice) {
+        hardwareChoiceBox.setVisible(true);
+        propertyTextField.setVisible(true);
+        closeEdit.setVisible(true);
+        hardwareChoiceBox.setOnAction(event -> {propertyTextField.setVisible(true);});
+        propertyTextField.setOnAction(event -> {
+            switch (hardwareChoiceBox.getValue()){
+                case "Manufacturer":
+                    selectedDevice.setManufacturer(propertyTextField.getText());
+                    break;
+                case "Device Type":
+                    selectedDevice.setDeviceType(propertyTextField.getText());
+                    break;
+                case "Location":
+                    selectedDevice.setLocation(propertyTextField.getText());
+                    break;
+                case "Version":
+                    selectedDevice.setVersion(propertyTextField.getText());
+                    break;
+                case "MAC Address":
+                    selectedDevice.setMAC_Address(propertyTextField.getText());
+                    break;
+            }
+        });
+
+
+    }
+
+    private void edit_software_device_properties(SoftwareDevice selectedDevice) {
+        softwareChoiceBox.setVisible(true);
+        propertyTextField.setVisible(true);
+        closeEdit.setVisible(true);
+        hardwareChoiceBox.setOnAction(event -> {propertyTextField.setVisible(true);});
+        propertyTextField.setOnAction(event -> {
+            switch (softwareChoiceBox.getValue()){
+                case "Manufacturer":
+                    selectedDevice.setManufacturer(propertyTextField.getText());
+                    propertyTextField.clear();
+                    break;
+                case "Device Type":
+                    selectedDevice.setDeviceType(propertyTextField.getText());
+                    break;
+                case "Version":
+                    selectedDevice.setVersion(propertyTextField.getText());
+                    break;
+                case "Installation date and time":
+                    selectedDevice.setInstallation_data_and_time(propertyTextField.getText());
+                    break;
+            }
+        });
+    }
+
+    public void closeEditProperties(){
+        closeEdit.setVisible(false);
+        propertyTextField.setVisible(false);
+        hardwareChoiceBox.setVisible(false);
+        softwareChoiceBox.setVisible(false);
+    }
+
+
+
 }
