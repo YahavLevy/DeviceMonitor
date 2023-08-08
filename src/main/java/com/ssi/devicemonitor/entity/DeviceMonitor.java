@@ -27,6 +27,9 @@ public class DeviceMonitor {
     }
 
     public void removeDevice(Device device) {
+        if(device!=null) {
+            this.devices.remove(device);
+        }
     }
 
 

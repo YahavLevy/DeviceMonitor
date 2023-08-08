@@ -1,8 +1,6 @@
 package com.ssi.devicemonitor.controller;
 
-import com.ssi.devicemonitor.entity.Device;
-import com.ssi.devicemonitor.entity.DeviceMonitor;
-import com.ssi.devicemonitor.entity.GeneralDevice;
+import com.ssi.devicemonitor.entity.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,6 +19,13 @@ public class DeviceMonitorController {
 
     @FXML
     private Button addDeviceButton;
+
+    @FXML
+    private RadioButton software_radio_button;
+    @FXML
+    private RadioButton hardware_radio_button;
+
+
 
     private DeviceMonitor deviceMonitor;
 
@@ -63,9 +68,22 @@ public class DeviceMonitorController {
     @FXML
     private void addDevice() {
         String deviceName = deviceNameTextField.getText();
-        Device newDevice = new GeneralDevice(deviceName);
-        deviceMonitor.addDevice(newDevice);
-        deviceNameTextField.clear();
+        if(software_radio_button.isSelected()){
+            Device newDevice = new SoftwareDevice(deviceName);
+            deviceMonitor.addDevice(newDevice);
+            deviceNameTextField.clear();
+        }
+        else if(hardware_radio_button.isSelected()){
+            Device newDevice = new HardwareDevice(deviceName);
+            deviceMonitor.addDevice(newDevice);
+            deviceNameTextField.clear();
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("You must choose device type");
+            alert.showAndWait();
+        }
     }
 
     public void refreshListView() {
