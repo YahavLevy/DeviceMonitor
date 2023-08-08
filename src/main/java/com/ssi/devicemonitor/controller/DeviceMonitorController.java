@@ -25,8 +25,11 @@ public class DeviceMonitorController {
     @FXML
     private RadioButton hardware_radio_button;
 
+    @FXML
+    private TextArea deviceInformation;
 
-
+    @FXML
+    private Button hideInformationButton;
     private DeviceMonitor deviceMonitor;
 
 
@@ -50,21 +53,32 @@ public class DeviceMonitorController {
                 deviceMonitor.removeDevice(selectedDevice);
             }
         });
+        MenuItem infoItem = new MenuItem("Information");
+        infoItem.setOnAction(event -> {
+            Device selectedDevice = deviceListView.getSelectionModel().getSelectedItem();
+            if(selectedDevice instanceof SoftwareDevice){
+                show_software_device_info((SoftwareDevice)selectedDevice);
+            }
+            else if(selectedDevice instanceof HardwareDevice){
+                show_hardware_device_info((HardwareDevice) selectedDevice);
+            }
+        });
 
         contextMenu.getItems().addAll(removeItem);
+        contextMenu.getItems().addAll(infoItem);
         deviceListView.setContextMenu(contextMenu);
 
     }
 
     private class DataUpdateTask extends TimerTask {
-        private Random random = new Random();
 
+        private Random random = new Random();
         @Override
         public void run() {
             refreshListView();
         }
-    }
 
+    }
     @FXML
     private void addDevice() {
         String deviceName = deviceNameTextField.getText();
@@ -91,6 +105,7 @@ public class DeviceMonitorController {
     }
 
     private class DeviceListCell extends ListCell<Device> {
+
         @Override
         protected void updateItem(Device device, boolean empty) {
             super.updateItem(device, empty);
@@ -112,5 +127,29 @@ public class DeviceMonitorController {
                 }
             }
         }
+    }
+    private void show_hardware_device_info(HardwareDevice selectedDevice) {
+        deviceInformation.setVisible(true);
+        hideInformationButton.setVisible(true);
+        if(selectedDevice.getManufacturer()!=null) deviceInformation.appendText(selectedDevice.getManufacturer()+"\n");
+        if(selectedDevice.getDeviceType()!=null) deviceInformation.appendText(selectedDevice.getDeviceType()+"\n");
+        if(selectedDevice.getLocation()!=null) deviceInformation.appendText(selectedDevice.getLocation()+"\n");
+        if(selectedDevice.getVersion()!=null) deviceInformation.appendText(selectedDevice.getVersion()+"\n");
+        if(selectedDevice.getMAC_Address()!=null) deviceInformation.appendText(selectedDevice.getMAC_Address()+"\n");
+    }
+
+    private void show_software_device_info(SoftwareDevice selectedDevice) {
+        deviceInformation.setVisible(true);
+        hideInformationButton.setVisible(true);
+        if(selectedDevice.getManufacturer()!=null) deviceInformation.appendText(selectedDevice.getManufacturer()+"\n");
+        if(selectedDevice.getDeviceType()!=null) deviceInformation.appendText(selectedDevice.getDeviceType()+"\n");
+        if(selectedDevice.getVersion()!=null) deviceInformation.appendText(selectedDevice.getVersion()+"\n");
+        if(selectedDevice.getInstallation_data_and_time()!=null) deviceInformation.appendText(selectedDevice.getInstallation_data_and_time()+"\n");
+
+    }
+    public void HideInformation(){
+        deviceInformation.clear();
+        deviceInformation.setVisible(false);
+        hideInformationButton.setVisible(false);
     }
 }
