@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <ListView fx:id="deviceListView" layoutX="45.0" layoutY="46.0" prefHeight="308.0" prefWidth="205.0" />
         <TextField fx:id="deviceNameTextField" layoutX="277.0" layoutY="46.0" prefWidth="222.0" />
         <Button fx:id="addDeviceButton" layoutX="277.0" layoutY="84.0" mnemonicParsing="false" onAction="#addDevice" text="Add Device" />
+      <RadioButton fx:id="software_radio_button" layoutX="378.0" layoutY="88.0" mnemonicParsing="false" text="Software Device">
+         <toggleGroup>
+            <ToggleGroup fx:id="device_type" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="hardware_radio_button" layoutX="378.0" layoutY="116.0" mnemonicParsing="false" text="Hardware Device" toggleGroup="$device_type" />
+      <TextArea fx:id="deviceInformation" layoutX="289.0" layoutY="154.0" prefHeight="200.0" prefWidth="261.0" visible="false" />
+      <Button fx:id="hideInformationButton" layoutX="378.0" layoutY="361.0" mnemonicParsing="false" onAction="#HideInformation" text="Hide Information" visible="false" />
+      <ChoiceBox fx:id="hardwareChoiceBox" layoutX="263.0" layoutY="154.0" prefWidth="150.0" visible="false" />
+      <ChoiceBox fx:id="softwareChoiceBox" layoutX="263.0" layoutY="154.0" prefWidth="150.0" visible="false" />
+      <TextField fx:id="propertyTextField" layoutX="276.0" layoutY="329.0" prefHeight="25.0" prefWidth="310.0" promptText="Write new property" visible="false" />
+      <Button fx:id="closeEdit" layoutX="276.0" layoutY="361.0" mnemonicParsing="false" onAction="#closeEditProperties" text="Close Edit" visible="false" />
     </children>
 </AnchorPane>
